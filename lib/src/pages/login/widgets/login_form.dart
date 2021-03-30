@@ -65,35 +65,7 @@ class _LoginFormState extends State<LoginForm> {
         height: 50,
         decoration: _boxDecoration(),
         child: TextButton(
-          onPressed: () {
-            String username = usernameController.text;
-            String password = passwordController.text;
-
-            _errorUsername = null;
-            _errorPassword = null;
-
-            if (!EmailSubmitRegexValidator().isValid(username)) {
-              _errorUsername = 'The Email mute be a valid email.';
-            }
-
-            if (password.length < 6) {
-              _errorPassword = "Mute be at least 6 charaters.";
-            }
-
-            if (_errorUsername == null && _errorPassword == null) {
-              showLoading();
-              Future.delayed(Duration(seconds: 2)).then((value) {
-                Navigator.pop(context);
-                if (username == 'sing@dev.com' && password == '123456') {
-                  print("success");
-                } else {
-                  showAlertBar();
-                }
-              });
-            } else {
-              setState(() {});
-            }
-          },
+          onPressed: _onLogin,
           child: Text(
             'LOGIN',
             style: TextStyle(
@@ -154,6 +126,36 @@ class _LoginFormState extends State<LoginForm> {
         borderRadius: 8,
         flushbarStyle: FlushbarStyle.GROUNDED,
       )..show(context);
+
+  void _onLogin() {
+    String username = usernameController.text;
+    String password = passwordController.text;
+
+    _errorUsername = null;
+    _errorPassword = null;
+
+    if (!EmailSubmitRegexValidator().isValid(username)) {
+      _errorUsername = 'The Email mute be a valid email.';
+    }
+
+    if (password.length < 6) {
+      _errorPassword = "Mute be at least 6 charaters.";
+    }
+
+    if (_errorUsername == null && _errorPassword == null) {
+      showLoading();
+      Future.delayed(Duration(seconds: 2)).then((value) {
+        Navigator.pop(context);
+        if (username == 'sing@dev.com' && password == '123456') {
+          print("success");
+        } else {
+          showAlertBar();
+        }
+      });
+    } else {
+      setState(() {});
+    }
+  }
 }
 
 class FormInput extends StatefulWidget {
@@ -178,6 +180,15 @@ class FormInput extends StatefulWidget {
 class _FormInputState extends State<FormInput> {
   final _color = Colors.black54;
 
+  bool _obscureTextPassword;
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    _obscureTextPassword = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -195,6 +206,7 @@ class _FormInputState extends State<FormInput> {
   }
 
   TextField _buildPassword() => TextField(
+        focusNode: _passwordFocusNode,
         controller: widget.passwordController,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -206,8 +218,22 @@ class _FormInputState extends State<FormInput> {
             color: _color,
           ),
           errorText: widget.errorPassword,
+          suffixIcon: IconButton(
+            icon: FaIcon(
+              _obscureTextPassword
+                  ? FontAwesomeIcons.eye
+                  : FontAwesomeIcons.eyeSlash,
+              color: _color,
+              size: 15.0,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureTextPassword = !_obscureTextPassword;
+              });
+            },
+          ),
         ),
-        obscureText: true,
+        obscureText: _obscureTextPassword,
       );
 
   TextField _buildUsername() => TextField(
@@ -224,6 +250,11 @@ class _FormInputState extends State<FormInput> {
           ),
           errorText: widget.errorUsername,
         ),
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        onSubmitted: (String value) {
+          FocusScope.of(context).requestFocus(_passwordFocusNode);
+        },
       );
 
   TextStyle _textStyle() => TextStyle(
