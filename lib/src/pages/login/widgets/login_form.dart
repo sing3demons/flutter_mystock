@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mystock/src/config/theme.dart' as cuttom_theme;
@@ -80,7 +81,15 @@ class _LoginFormState extends State<LoginForm> {
             }
 
             if (_errorUsername == null && _errorPassword == null) {
-              setState(() {});
+              showLoading();
+              Future.delayed(Duration(seconds: 2)).then((value) {
+                Navigator.pop(context);
+                if (username == 'sing@dev.com' && password == '123456') {
+                  print("success");
+                } else {
+                  showAlertBar();
+                }
+              });
             } else {
               setState(() {});
             }
@@ -123,6 +132,28 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+
+  Flushbar showAlertBar() => Flushbar(
+        title: 'error',
+        message: 'Username or Password is incorrect',
+        backgroundColor: Colors.red,
+        boxShadows: [
+          BoxShadow(
+            color: Colors.red[800],
+            offset: Offset(0.0, 2.0),
+            blurRadius: 3.0,
+          )
+        ],
+        duration: Duration(seconds: 3),
+      )..show(context);
+
+  Flushbar showLoading() => Flushbar(
+        message: 'Loading...',
+        showProgressIndicator: true,
+        flushbarPosition: FlushbarPosition.TOP,
+        borderRadius: 8,
+        flushbarStyle: FlushbarStyle.GROUNDED,
+      )..show(context);
 }
 
 class FormInput extends StatefulWidget {
@@ -185,7 +216,7 @@ class _FormInputState extends State<FormInput> {
           border: InputBorder.none,
           labelText: "Email Address",
           labelStyle: _textStyle(),
-          hintText: 'sing3demons@dev.com',
+          hintText: 'sing@dev.com',
           icon: FaIcon(
             FontAwesomeIcons.envelope,
             size: 22.0,
