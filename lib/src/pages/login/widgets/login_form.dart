@@ -2,6 +2,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mystock/src/config/theme.dart' as cuttom_theme;
+import 'package:mystock/src/pages/home/home_page.dart';
 import 'package:mystock/src/utils/RegexVaildator.dart';
 
 class LoginForm extends StatefulWidget {
@@ -147,7 +148,11 @@ class _LoginFormState extends State<LoginForm> {
       Future.delayed(Duration(seconds: 2)).then((value) {
         Navigator.pop(context);
         if (username == 'sing@dev.com' && password == '123456') {
-          print("success");
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(name: 'sing',age: 24,),
+            ),
+          );
         } else {
           showAlertBar();
         }

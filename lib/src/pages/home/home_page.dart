@@ -3,9 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:mystock/src/constants/asset.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key key, this.name = '', this.age = 0}) : super(key: key);
 
-  final String title;
+  final String name;
+  final int age;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -18,10 +19,16 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Image.asset(Asset.LOGO_IMAGE),
-          Image.network('https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png'),
+          Image.network(
+              'https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png'),
+          Text('name: ${widget.name}, age: ${widget.age}'),
+          TextButton(onPressed: (){
+            if (Navigator.canPop(context)){
+              Navigator.pop(context);
+            }
+          }, child: Text('back'))
         ],
       ),
-
     );
   }
 }
