@@ -14,17 +14,40 @@ class LoginPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(gradient: custom_theme.Theme.gradient),
           ),
-          Column(
-            children: [
-              Header(),
-              LoginForm(),
-              Text("forgot password"),
-              SingleSignOn(),
-              Text("register"),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Header(),
+                LoginForm(),
+                SizedBox(height: 30),
+                _buildFlatButton("Forgot Password", onPressed: () {}),
+                SingleSignOn(),SizedBox(height: 28),
+                _buildFlatButton("Don't have an Account", onPressed: () {}),
+                SizedBox(
+                  height: 80,
+                )
+              ],
+            ),
           ),
         ],
       ),
     );
   }
+
+  TextButton _buildFlatButton(
+    String text, {
+    @required VoidCallback onPressed,
+    double fontSize = 16,
+  }) =>
+      TextButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      );
 }
