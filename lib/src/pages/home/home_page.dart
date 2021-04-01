@@ -1,9 +1,11 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mystock/src/config/routes.dart';
 import 'package:mystock/src/constants/asset.dart';
 import 'package:mystock/src/constants/setting.dart';
+import 'package:mystock/src/viewmodels/menu_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +25,8 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: Column(
           children: [
+            _buildProfile(),
+            ..._buildMainMenu(),
             Spacer(),
             ListTile(
               leading: FaIcon(
@@ -75,4 +79,41 @@ class _HomePageState extends State<HomePage> {
       body: Image.asset(Asset.LOGO_IMAGE),
     );
   }
+
+  UserAccountsDrawerHeader _buildProfile() => UserAccountsDrawerHeader(
+        accountName: Text("KP sing"),
+        accountEmail: Text('sing@dev.com'),
+        currentAccountPicture: CircleAvatar(
+          backgroundImage: NetworkImage(
+              'https://cdn-images-1.medium.com/max/280/1*X5PBTDQQ2Csztg3a6wofIQ@2x.png'),
+        ),
+      );
+
+  List<ListTile> _buildMainMenu() => MenuViewModle()
+      .items
+      .map(
+        (item) => ListTile(
+          title: Text(
+            item.title,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
+          leading: Badge(
+            showBadge: item.icon == FontAwesomeIcons.inbox,
+            badgeContent: Text(
+              '99',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+            badgeColor: Colors.red,
+            child: FaIcon(
+              item.icon,
+              color: item.iconColor,
+            ),
+          ),
+          onTap: () => item.onTap(context),
+        ),
+      )
+      .toList();
 }
