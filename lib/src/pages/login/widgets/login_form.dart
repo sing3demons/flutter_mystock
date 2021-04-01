@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mystock/src/config/routes.dart' as routes;
@@ -126,7 +126,6 @@ class _LoginFormState extends State<LoginForm> {
         message: 'Loading...',
         showProgressIndicator: true,
         flushbarPosition: FlushbarPosition.TOP,
-        borderRadius: 8,
         flushbarStyle: FlushbarStyle.GROUNDED,
       )..show(context);
 
@@ -153,7 +152,6 @@ class _LoginFormState extends State<LoginForm> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString(Setting.TOKEN_PREF, '1234');
           prefs.setString(Setting.USERNAME_PREF, username);
-
 
           Navigator.pushReplacementNamed(context, routes.Routes.home);
         } else {
